@@ -5,7 +5,7 @@ A simple multi-threaded bitcoin vanity address generator written in Java.
 Prerequisites:
 -------------------------
 
-* JDK 1.5 or higher
+* JDK 1.6 or higher
 * Maven
 * For additional dependency information refer to pom.xml
 
