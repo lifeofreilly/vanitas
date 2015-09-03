@@ -1,11 +1,11 @@
 Vanitas
 =======
-A simple multi-threaded bitcoin vanity address generator written in Java.
+A Bitcoin vanity address generator that leverages the Java 8 streams API.
 
 Prerequisites:
 -------------------------
 
-* JDK 1.6 or higher
+* JDK 1.8 or higher
 * Maven
 * For additional dependency information refer to pom.xml
 
@@ -44,7 +44,7 @@ Execute all unit tests:
 Limitations:
 -------------------------
 
-* It's slow. Ideally this type of work would be perfomed on a GPU.
+* It's slow. Ideally this type of work would be performed on a GPU.
 
 License
 -------------------------

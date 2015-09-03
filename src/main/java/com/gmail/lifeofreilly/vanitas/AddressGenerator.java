@@ -1,77 +1,66 @@
 package com.gmail.lifeofreilly.vanitas;
 
-import com.google.common.base.CharMatcher;
 import org.apache.log4j.Logger;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
+import com.google.common.base.CharMatcher;
 
 import java.text.NumberFormat;
 import java.util.Locale;
-import java.util.concurrent.Callable;
+import java.util.Optional;
+import java.util.stream.LongStream;
 
-class AddressGenerator implements Callable<ECKey> {
+/**
+ * A multi-threaded bitcoin vanity address generator.
+ */
+class AddressGenerator {
     private static final Logger log = Logger.getLogger(AddressGenerator.class);
     private static final int BTC_ADDRESS_MAX_LENGTH = 35;
     private final NetworkParameters netParams;
-    private long attempts;
-    private String targetPhrase;
+    private final String searchString;
 
     /**
      * Sole constructor for AddressGenerator
      *
-     * @param targetPhrase the desired bitcoin address substring
-     * @param netParams    the target bitcoin network e.g production or testnet
+     * @param searchString the desired bitcoin address substring
+     * @param netParams    the target bitcoin network
      */
-    public AddressGenerator(final String targetPhrase, final NetworkParameters netParams) {
+    public AddressGenerator(final String searchString, final NetworkParameters netParams) {
         this.netParams = netParams;
 
-        if (isValidBTCAddressSubstring(targetPhrase)) {
-            this.targetPhrase = targetPhrase;
+        if (isValidSearchString(searchString)) {
+            this.searchString = searchString;
         } else {
-            throw new IllegalArgumentException("The requested phrase is not a valid bitcoin address substring.");
+            log.error("Filed to create AddressGenerator. IllegalArgumentException: " +
+                    "The target phrase '" + searchString + "' is not valid in a bitcoin address.");
+            throw new IllegalArgumentException("The target phrase '" + searchString + "' is not valid in a bitcoin address.");
         }
 
     }
 
     /**
-     * Attempts to compute a bitcoin address that contains the target phrase.
+     * Generates a stream of keys and returns the first match.
      *
-     * @return An ECKey which represents an elliptic curve public key (bitcoin address) and private key
-     * @throws Exception
+     * @return an ECKey with an address that contains the search string
      */
-    @Override
-    public ECKey call() throws Exception {
-        ECKey key;
-
-        do {
-            key = new ECKey();
-            attempts++;
-            logAttempts();
-        } while (!(key.toAddress(netParams).toString().contains(targetPhrase)) &&
-                !Thread.currentThread().isInterrupted());
-
-        log.debug("Exiting thread " + Thread.currentThread().getName() +
-                ", Attempts made: " + NumberFormat.getNumberInstance(Locale.US).format(attempts));
-        return key;
+    public ECKey generate() {
+        Optional<ECKey> found = LongStream.iterate(0L, n -> n + 1)
+                .parallel()
+                .peek(AddressGenerator::logAttempts)
+                .mapToObj(ignore -> new ECKey())
+                .filter(key -> key.toAddress(netParams).toString().contains(searchString))
+                .findAny();
+        return found.get();
     }
 
     /**
-     * Logs progress every 1M attempts
-     */
-    private void logAttempts() {
-        if (attempts % 1000000 == 0) {
-            log.debug("Thread " + Thread.currentThread().getName() + " is still working, # of attempts: " +
-                    NumberFormat.getNumberInstance(Locale.US).format(attempts));
-        }
-    }
-
-    /**
-     * Verifies that the requested phrase represents a valid bitcoin address substring
+     * Verifies that the requested search string represents a valid bitcoin address substring
+     * Reference: https://en.bitcoin.it/wiki/Address#Address_validation
      *
      * @param substring the requested phrase
      * @return true if the requested phrase is a valid bitcoin address substring
      */
-    private static boolean isValidBTCAddressSubstring(final String substring) {
+    public static boolean isValidSearchString(final String substring) {
         boolean validity = true;
 
         if (!CharMatcher.JAVA_LETTER_OR_DIGIT.matchesAllOf(substring) ||
@@ -82,4 +71,21 @@ class AddressGenerator implements Callable<ECKey> {
 
         return validity;
     }
+
+    /**
+     * For every 1 million attempts, log the total number of attempts
+     *
+     * @param attempts the current number of attempts
+     */
+    private static void logAttempts(long attempts) {
+        if (attempts == 0) {
+            log.debug("Address generation initiated.");
+        } else if (attempts % 1000000 == 0) {
+            log.debug("Address generation in progress, attempts made: " +
+                    NumberFormat.getNumberInstance(Locale.US).format(attempts));
+        }
+    }
+
 }
+
+
