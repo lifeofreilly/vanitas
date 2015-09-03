@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.stream.LongStream;
 
 /**
- * A multi-threaded bitcoin vanity address generator.
+ * A Bitcoin vanity address generator that leverages the Java 8 streams API.
  */
 class AddressGenerator {
     private static final Logger log = Logger.getLogger(AddressGenerator.class);
