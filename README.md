@@ -1,6 +1,6 @@
 Vanitas
 =======
-A Bitcoin vanity address generator that leverages the Java 8 streams API.
+Java 8 streams based bitcoin vanity address generator.
 
 Prerequisites:
 -------------------------
@@ -12,7 +12,7 @@ Prerequisites:
 Build Instructions:
 -------------------------
 
-Building an Executable Jar:
+Building an executable jar:
 > mvn package
 
 The standalone executable jar can be found at: ./target/vanitas-1.0-SNAPSHOT-jar-with-dependencies.jar
