@@ -63,7 +63,7 @@ public class AddressGeneratorTest extends TestCase {
             new AddressGenerator(targetPhrase, NET_PARAMS);
             fail("Expected: IllegalArgumentException.");
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is(equalTo("The target phrase 'OIl0' is not valid in a bitcoin address.")));
+            assertThat(e.getMessage(), is(equalTo("The target phrase '" + targetPhrase + "' is not valid in a bitcoin address.")));
         }
     }
 
@@ -78,7 +78,7 @@ public class AddressGeneratorTest extends TestCase {
             new AddressGenerator(targetPhrase, NET_PARAMS);
             fail("Expected: IllegalArgumentException.");
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is(equalTo("The target phrase '111111111111111111111111111111111111' is not valid in a bitcoin address.")));
+            assertThat(e.getMessage(), is(equalTo("The target phrase '" + targetPhrase + "' is not valid in a bitcoin address.")));
         }
     }
 
@@ -93,7 +93,7 @@ public class AddressGeneratorTest extends TestCase {
             new AddressGenerator(targetPhrase, NET_PARAMS);
             fail("Expected: IllegalArgumentException.");
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is(equalTo("The target phrase 'foo.bar' is not valid in a bitcoin address.")));
+            assertThat(e.getMessage(), is(equalTo("The target phrase '" + targetPhrase + "' is not valid in a bitcoin address.")));
         }
     }
 
