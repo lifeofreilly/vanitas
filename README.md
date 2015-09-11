@@ -29,11 +29,15 @@ Log information will be output to ./logs/error.log
 Example Output:
 -------------------------
 
+```
 Searching for a bitcoin address that contains: 1Love  
 Status is available at: ./logs/error.log  
-Found in 1 minutes  
-Address: 1LoveEbV9B5iRzKU63PKh1tXNk7vh865B7  
-Private Key: 45777959218638374115925337441855471702901360693577031567674250991838132852058  
+Found in 1 min, 26 sec
+Address: 1LoveJQWA5myfRJTKCzUcuahB9LGTaJHeY   
+Private Key: 47310361300386867319958211412465237243746476090561242137932936363091835794229   
+Private Key (HEX): 6898b72f443236a9ef6250750e83e57a159dd40769555d15a88cc3640358b335   
+Private Key (WIF): Kzj2rvFzgjPVoYUhT7zBaVzvzEtUrDqT5esSnnum32nupTaNQzet   
+```
 
 Test Execution:
 -------------------------

@@ -37,6 +37,8 @@ class Vanitas {
                 System.out.println("Found in " + getElapsedTimeMinSec(startTime));
                 System.out.println("Address: " + key.toAddress(NET_PARAMS));
                 System.out.println("Private Key: " + key.getPrivKey());
+                System.out.println("Private Key (HEX): " + key.getPrivateKeyAsHex());
+                System.out.println("Private Key (WIF): " + key.getPrivateKeyAsWiF(NET_PARAMS));
 
             } else {
                 System.out.println("Your target phrase '" + searchString + "' contains illegal characters. " +
